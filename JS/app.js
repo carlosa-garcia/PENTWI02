@@ -2,7 +2,6 @@ function newAction () {
     if ( !$('#myInput').val() ) {
         $('#myInput').focus();
     } else {
-        // var closeBtn = '<span class="close" onclick="closeBtn(this)">x</span>';
         var item = $('#myInput').val();
         $('#todo-list').append("<li class=\"list-group-item\">" + item + "</li>");
         $('#myInput').val('').focus();
@@ -21,16 +20,17 @@ function makeClickable () {
     );
 }
 
-function closeBtn (el) {
-    var item = el.parentElement;
-    item.remove();
-    updateStatusBar();
-}
-
 function updateForm (el) {
     var items
     var update
+    var alert
 
+    alert = `<div class="alert alert-danger alert-dismissible fade show" role="alert">
+                Tasks have been deleted!
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>`
     if (el == 'checked') {
         items = '.list-group-item-success';
         update =  $(items).remove();
@@ -38,6 +38,7 @@ function updateForm (el) {
         items = '.list-group-item';
         update =  $(items).remove();
         $('#clearAll').prop('disabled', true)
+        $(alert).prependTo('body')
     } else if (el == 'mark-all') {
         items = '.list-group-item';
         update = $(items).toggleClass('list-group-item-success');
@@ -64,7 +65,7 @@ function updateStatusBar () {
         $('.progress-bar').css('width',  progress + '%');
         $('.progress-bar').html(Math.round(progress * 10) / 10 + '%')
     }
-    if ($('.list-group-item-success').length === 0) {
+    if (done === 0) {
         $('#clearComplete').prop('disabled', true)
     } else {
         $('#clearComplete').prop('disabled', false)
